@@ -5,6 +5,7 @@
  */
 package proyecto;
 
+import Conexion.Conexion;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -24,28 +25,23 @@ public class GestionReportes extends javax.swing.JFrame {
     /**
      * Creates new form GestionReportes
      */
-    public GestionReportes() {
-        initComponents();
-        this.setLocationRelativeTo(null);
-        Connection con = null;
+    Conexion conectar = new Conexion();
+    Connection con;
+    PreparedStatement ps;
+    ResultSet rs;
+
+    public void Actualizar() throws SQLException {
+        con = conectar.getConnection();
         try {
             DefaultTableModel modelo = new DefaultTableModel();
             jTable1.setModel(modelo);
-            PreparedStatement ps1 = null;
-            ResultSet rs1 = null;
-
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(GestionReportes.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            con = DriverManager.getConnection("jdbc:mysql://us-cdbr-east-05.cleardb.net:3306/heroku_743c051ba58d699", "be703576092fb9", "56e316e3");
 
             String sql = "SELECT codalu,NomAlu,ApaAlu,EmaAlu,EdadAlu,ciclo,TimePract FROM alumno";
-            ps1 = con.prepareStatement(sql);
-            rs1 = ps1.executeQuery();
 
-            ResultSetMetaData rsMd = rs1.getMetaData();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsMd = rs.getMetaData();
             int cantidadColumnas = rsMd.getColumnCount();
 
             modelo.addColumn("Codigo");
@@ -56,11 +52,11 @@ public class GestionReportes extends javax.swing.JFrame {
             modelo.addColumn("Ciclo");
             modelo.addColumn("Tiempo de Practicas");
 
-            while (rs1.next()) {
+            while (rs.next()) {
                 Object[] filas = new Object[cantidadColumnas];
 
                 for (int i = 0; i < cantidadColumnas; i++) {
-                    filas[i] = rs1.getObject(i + 1);
+                    filas[i] = rs.getObject(i + 1);
                 }
                 modelo.addRow(filas);
             }
@@ -68,6 +64,13 @@ public class GestionReportes extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.err.println(ex.toString());
         }
+    }
+
+    public GestionReportes() throws SQLException {
+        initComponents();
+        this.setLocationRelativeTo(null);
+        setTitle("Gestión de Reportes");
+        Actualizar();
     }
 
     /**
@@ -175,14 +178,12 @@ public class GestionReportes extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                             .addComponent(jTextField6)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 4, Short.MAX_VALUE)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(76, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(66, 66, 66)
                 .addComponent(jButton2)
@@ -338,44 +339,37 @@ public class GestionReportes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        try {
+           
+            con = conectar.getConnection();
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionReportes.class.getName()).log(Level.SEVERE, null, ex);
+        }
         String campo = jTextField11.getText();
         String where = "";
         if (!"".equals(campo)) {
             where = "WHERE codalu = '" + campo + "'";
         }
-
-        Connection con = null;
         try {
 
-            PreparedStatement ps1 = null;
-            ResultSet rs1 = null;
-
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(GestionReportes.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            con = DriverManager.getConnection("jdbc:mysql://us-cdbr-east-05.cleardb.net:3306/heroku_743c051ba58d699", "be703576092fb9", "56e316e3");
-
             String sql = "SELECT codalu,NomAlu,ApaAlu,EmaAlu,EdadAlu,ciclo,TimePract FROM alumno " + where;
-            ps1 = con.prepareStatement(sql);
-            rs1 = ps1.executeQuery();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
 
-            rs1.next();
-            jTextField1.setText(rs1.getString("codalu"));
+            rs.next();
+            jTextField1.setText(rs.getString("codalu"));
             jTextField1.setEnabled(false);
-            jTextField2.setText(rs1.getString("NomAlu"));
+            jTextField2.setText(rs.getString("NomAlu"));
             jTextField2.setEnabled(false);
-            jTextField3.setText(rs1.getString("ApaAlu"));
+            jTextField3.setText(rs.getString("ApaAlu"));
             jTextField3.setEnabled(false);
-            jTextField4.setText(rs1.getString("EdadAlu"));
+            jTextField4.setText(rs.getString("EdadAlu"));
             jTextField4.setEnabled(false);
-            jTextField6.setText(rs1.getString("EmaAlu"));
+            jTextField6.setText(rs.getString("EmaAlu"));
             jTextField6.setEnabled(false);
-            jTextField8.setText(rs1.getString("ciclo"));
+            jTextField8.setText(rs.getString("ciclo"));
             jTextField8.setEnabled(false);
-            jTextField12.setText(rs1.getString("TimePract"));
+            jTextField12.setText(rs.getString("TimePract"));
             jTextField12.setEnabled(false);
         } catch (SQLException ex) {
             System.err.println(ex.toString());
@@ -397,7 +391,7 @@ public class GestionReportes extends javax.swing.JFrame {
         jTextField8.setText("");
         jTextField12.setText("");
         jTextField11.setText("");
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -430,7 +424,11 @@ public class GestionReportes extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GestionReportes().setVisible(true);
+                try {
+                    new GestionReportes().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GestionReportes.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
