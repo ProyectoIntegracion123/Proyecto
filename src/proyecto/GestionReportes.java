@@ -36,6 +36,8 @@ public class GestionReportes extends javax.swing.JFrame {
         try {
             DefaultTableModel modelo = new DefaultTableModel();
             jTable1.setModel(modelo);
+            jTable1.setEnabled(false);
+            jTable1.getTableHeader().setReorderingAllowed(false);
 
             String sql = "SELECT codalu,NomAlu,ApaAlu,EmaAlu,EdadAlu,ciclo,TimePract FROM alumno WHERE IDF LIKE " + Integer.toString(a.id);
 
@@ -250,7 +252,7 @@ public class GestionReportes extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setText("Salir");
+        jButton6.setText("Atrás");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -280,7 +282,7 @@ public class GestionReportes extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(27, Short.MAX_VALUE)
+                .addContainerGap(21, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -383,7 +385,9 @@ public class GestionReportes extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-        dispose();
+        this.setVisible(false);
+        Principal a = new Principal();
+        a.setVisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

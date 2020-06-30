@@ -53,6 +53,9 @@ public class GestionAlumno extends javax.swing.JFrame {
             modelo.addRow(datos);
         }
         tabla.setModel(modelo);
+        tabla.setEnabled(false);
+        tabla.getTableHeader().setReorderingAllowed(false);
+                
 
         ps = con.prepareStatement("SELECT COUNT(*) FROM ALUMNO WHERE IDF LIKE '" + a.id + "'");
         rs1 = ps.executeQuery();
