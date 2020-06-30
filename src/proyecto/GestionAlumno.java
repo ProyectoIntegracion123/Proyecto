@@ -72,7 +72,7 @@ public class GestionAlumno extends javax.swing.JFrame {
         setResizable(false);
         setTitle("Gestión de Alumno");
         Actualizar();
-
+        jPanel1.setVisible(false);
     }
 
     /**
@@ -352,40 +352,58 @@ public class GestionAlumno extends javax.swing.JFrame {
             Logger.getLogger(GestionReportes.class.getName()).log(Level.SEVERE, null, ex);
         }
         String campo = codigoalumno.getText();
-        String where = "";
-        if (!"".equals(campo)) {
-            where = "WHERE codalu = '" + campo + "'";
-        }
-        try {
-
-            String sql = "SELECT * FROM alumno " + where;
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int valalu = rs.getInt("IDF");
-                int valadm = a.id;
-                if (valalu != valadm) {
-                    JOptionPane.showMessageDialog(null, "No tiene acceso a la información de este alumno");
-                } else {
-                    jTextField1.setText(rs.getString("codalu"));
-                    jTextField1.setEnabled(false);
-                    jTextField2.setText(rs.getString("NomAlu"));
-                    jTextField2.setEnabled(false);
-                    jTextField3.setText(rs.getString("ApaAlu"));
-                    jTextField3.setEnabled(false);
-                    jTextField4.setText(rs.getString("EdadAlu"));
-                    jTextField4.setEnabled(false);
-                    jTextField6.setText(rs.getString("EmaAlu"));
-                    jTextField6.setEnabled(false);
-                    jTextField8.setText(rs.getString("ciclo"));
-                    jTextField8.setEnabled(false);
-                    jTextField12.setText(rs.getString("TimePract"));
-                    jTextField12.setEnabled(false);
+        boolean existe = false;
+        if ((campo == null) || (campo.equals("")) || !(campo.length() == 8)) {
+            JOptionPane.showMessageDialog(null, "Ingrese un codigo valido");
+        } else {
+            try {
+                ps = con.prepareStatement("SELECT codalu FROM alumno");
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    if (campo.equals(rs.getString(1))) {
+                        existe = true;
+                    }
                 }
+                if (!existe) {
+                    JOptionPane.showMessageDialog(null, "El codigo no existe en la base de datos");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(GestionAlumno.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            System.err.println(ex.toString());
+            String where = "";
+            where = "WHERE codalu = '" + campo + "'";
+
+            try {
+                String sql = "SELECT * FROM alumno " + where;
+                ps = con.prepareStatement(sql);
+                rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    int valalu = rs.getInt("IDF");
+                    int valadm = a.id;
+                    if (valalu != valadm) {
+                        JOptionPane.showMessageDialog(null, "No tiene acceso a la información de este alumno");
+                    } else {
+                        jPanel1.setVisible(true);
+                        jTextField1.setText(rs.getString("codalu"));
+                        jTextField1.setEnabled(false);
+                        jTextField2.setText(rs.getString("NomAlu"));
+                        jTextField2.setEnabled(false);
+                        jTextField3.setText(rs.getString("ApaAlu"));
+                        jTextField3.setEnabled(false);
+                        jTextField4.setText(rs.getString("EdadAlu"));
+                        jTextField4.setEnabled(false);
+                        jTextField6.setText(rs.getString("EmaAlu"));
+                        jTextField6.setEnabled(false);
+                        jTextField8.setText(rs.getString("ciclo"));
+                        jTextField8.setEnabled(false);
+                        jTextField12.setText(rs.getString("TimePract"));
+                        jTextField12.setEnabled(false);
+                    }
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.toString());
+            }
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
