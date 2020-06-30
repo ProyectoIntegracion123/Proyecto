@@ -100,7 +100,7 @@ public class GestionAlumno extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
         bSalir = new javax.swing.JButton();
-        jTextField11 = new javax.swing.JTextField();
+        codigoalumno = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jTabla = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
@@ -278,7 +278,7 @@ public class GestionAlumno extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(codigoalumno, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(140, 140, 140)
                         .addComponent(jButton5)
                         .addGap(56, 56, 56)
@@ -295,7 +295,7 @@ public class GestionAlumno extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(codigoalumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -332,27 +332,10 @@ public class GestionAlumno extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        Connection con = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://us-cdbr-east-05.cleardb.net:3306/heroku_743c051ba58d699", "be703576092fb9", "56e316e3");
-            // String sql = "Select * from alumno";
-            // PreparedStatement pst = con.prepareStatement(sql);
-
-        } catch (Exception e) {
-
-        }
-        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM alumno")) {
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                System.out.println(rs.getString("NomAlu"));
-            }
-
-        } catch (SQLException sqle) {
-            System.out.println("Error en la ejecución:"
-                    + sqle.getErrorCode() + " " + sqle.getMessage());
-        }
+        // ACCION BUSCAR ESTUDIANTES
+        String texto = codigoalumno.getText();
+        alumno Alu=new alumno();
+        String alumnito=Alu.buscarAlumnos(texto);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void bSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSalirActionPerformed
@@ -405,6 +388,7 @@ public class GestionAlumno extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CantidadAlumnos;
     private javax.swing.JButton bSalir;
+    private javax.swing.JTextField codigoalumno;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
@@ -421,7 +405,6 @@ public class GestionAlumno extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jTabla;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
