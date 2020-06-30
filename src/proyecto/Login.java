@@ -5,6 +5,14 @@
  */
 package proyecto;
 
+import Conexion.Conexion;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Danie
@@ -14,6 +22,8 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
+    
+    
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -21,7 +31,9 @@ public class Login extends javax.swing.JFrame {
         setResizable(false);
         
     }
-
+    
+    public static int id;
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -113,16 +125,44 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // ACCION DE LOGIN PARA EL USUARIO ADMINISTRADOR:
-        String USER = usuariologin.getText();
-        String PASSWORD = passlogin.getText();
-        administrador Admin = new administrador();
-        String message = Admin.login(USER, PASSWORD);
-        System.out.println(message);
-        
-        Principal a = new Principal();
-        a.setVisible(true);
-        this.setVisible(false);
+        try {                                         
+            // ACCION DE LOGIN PARA EL USUARIO ADMINISTRADOR:
+            String USER = usuariologin.getText();
+            String PASSWORD = passlogin.getText();
+            administrador Admin = new administrador();
+            String message = Admin.login(USER, PASSWORD);
+            System.out.println(message);
+            
+            
+            Conexion conectar = new Conexion();
+            PreparedStatement ps;
+            ResultSet rs;
+            try {
+                Connection con = conectar.getConnection();
+                ps = con.prepareStatement("SELECT IDF FROM ADMINISTRADOR WHERE USUARIO like '"+ USER+"'");
+                rs = ps.executeQuery();
+                while(rs.next()){
+                    id = rs.getInt(1);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            GestionAlumno b = new GestionAlumno();
+            b.setVisible(false);
+            
+            GestionReportes c = new GestionReportes();
+            c.setVisible(false);
+            
+            GestionTiempoP x = new GestionTiempoP();
+            x.setVisible(false);
+            
+            Principal a = new Principal();
+            a.setVisible(true);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

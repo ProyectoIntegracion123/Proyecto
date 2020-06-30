@@ -29,6 +29,7 @@ public class GestionTiempoP extends javax.swing.JFrame {
     Statement st, st1;
     PreparedStatement ps, ps1;
     ResultSet rs, rs1;
+    Login a = new Login();
 
     public GestionTiempoP() {
         initComponents();
@@ -140,14 +141,12 @@ public class GestionTiempoP extends javax.swing.JFrame {
         String cod;
         int tiempo;
         boolean flag1 = false, flag2 = false;
-        String var = "04";
-        String codigo = "'1_" + var + "%'";
 
         cod = vCodigo.getText();
         tiempo = Integer.parseInt(vTiempo.getText());
 
         try {
-            ps = con.prepareStatement("SELECT CODALU, TIMEPRACT FROM ALUMNO WHERE CODALU LIKE " + codigo);
+            ps = con.prepareStatement("SELECT CODALU, TIMEPRACT FROM ALUMNO WHERE idf LIKE " + a.id);
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -207,13 +206,11 @@ public class GestionTiempoP extends javax.swing.JFrame {
 
         String cod;
         boolean flag = false;
-        String var = "04";
-        String codigo = "'1_" + var + "%'";
 
         cod = vCodigo.getText();
 
         try {
-            ps = cn.prepareStatement("SELECT CODALU FROM ALUMNO WHERE CODALU LIKE " + codigo);
+            ps = cn.prepareStatement("SELECT CODALU FROM ALUMNO WHERE idf LIKE " + a.id);
             rs = ps.executeQuery();
 
             while (rs.next()) {

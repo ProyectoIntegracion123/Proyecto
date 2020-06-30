@@ -29,6 +29,7 @@ public class GestionReportes extends javax.swing.JFrame {
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
+    Login a = new Login();
 
     public void Actualizar() throws SQLException {
         con = conectar.getConnection();
@@ -36,7 +37,7 @@ public class GestionReportes extends javax.swing.JFrame {
             DefaultTableModel modelo = new DefaultTableModel();
             jTable1.setModel(modelo);
 
-            String sql = "SELECT codalu,NomAlu,ApaAlu,EmaAlu,EdadAlu,ciclo,TimePract FROM alumno";
+            String sql = "SELECT codalu,NomAlu,ApaAlu,EmaAlu,EdadAlu,ciclo,TimePract FROM alumno WHERE IDF LIKE " + Integer.toString(a.id);
 
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -60,6 +61,18 @@ public class GestionReportes extends javax.swing.JFrame {
                 }
                 modelo.addRow(filas);
             }
+            
+            
+            String sentencia = "SELECT COUNT(*) FROM ALUMNO WHERE IDF LIKE " + Integer.toString(a.id);
+            ps = con.prepareStatement(sentencia);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                jCantAlu.setText(Integer.toString(rs.getInt(1)));
+            }
+            
+            
+            
+            
 
         } catch (SQLException ex) {
             System.err.println(ex.toString());
@@ -108,7 +121,7 @@ public class GestionReportes extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
-        jTextField13 = new javax.swing.JTextField();
+        jCantAlu = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -272,7 +285,7 @@ public class GestionReportes extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jCantAlu, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jScrollPane1)
                         .addGroup(jPanel2Layout.createSequentialGroup()
@@ -301,7 +314,7 @@ public class GestionReportes extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField13)
+                    .addComponent(jCantAlu)
                     .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(17, 17, 17))
         );
@@ -438,6 +451,7 @@ public class GestionReportes extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JTextField jCantAlu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -454,7 +468,6 @@ public class GestionReportes extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;

@@ -23,7 +23,6 @@ public class Conexion {
 
             Class.forName(driver).newInstance();
             con = DriverManager.getConnection(urlDB, user, pass);
-            System.out.println("Base de datos conectada");
         } catch (SQLException e) {
             throw e;
         } catch (ClassNotFoundException e) {

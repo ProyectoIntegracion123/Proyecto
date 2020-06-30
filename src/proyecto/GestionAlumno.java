@@ -28,18 +28,17 @@ public class GestionAlumno extends javax.swing.JFrame {
     Connection con;
     PreparedStatement ps;
     ResultSet rs, rs1;
+    Login a = new Login();
 
     public void Actualizar() throws SQLException {
         con = conectar.getConnection();
         String[] datos = {"", "", "", ""};
-        String var = "04";
-        String codigo = "'1_" + var + "%'";
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("CÓDIGO");
         modelo.addColumn("NOMBRES");
         modelo.addColumn("APELLIDOS");
         modelo.addColumn("TIEMPO DE PRÁCTICAS");
-        ps = con.prepareStatement("SELECT CODALU, NOMALU, APAALU, TIMEPRACT FROM ALUMNO WHERE CODALU LIKE " + codigo);
+        ps = con.prepareStatement("SELECT CODALU, NOMALU, APAALU, TIMEPRACT FROM ALUMNO WHERE IDF LIKE '" + a.id + "'");
         rs = ps.executeQuery();
         while (rs.next()) {
             datos[0] = rs.getString(1);
@@ -51,7 +50,7 @@ public class GestionAlumno extends javax.swing.JFrame {
         tabla.setModel(modelo);
 
         int aux = 0;
-        ps = con.prepareStatement("SELECT COUNT(*) FROM ALUMNO WHERE CODALU LIKE " + codigo);
+        ps = con.prepareStatement("SELECT COUNT(*) FROM ALUMNO WHERE CODALU LIKE '" + a.id +"'");
         rs1 = ps.executeQuery();
         while (rs1.next()) {
             aux = rs1.getInt(1);
@@ -334,8 +333,8 @@ public class GestionAlumno extends javax.swing.JFrame {
         // TODO add your handling code here:
         // ACCION BUSCAR ESTUDIANTES
         String texto = codigoalumno.getText();
-        alumno Alu=new alumno();
-        String alumnito=Alu.buscarAlumnos(texto);
+        alumno Alu = new alumno();
+        String alumnito = Alu.buscarAlumnos(texto);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void bSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSalirActionPerformed
