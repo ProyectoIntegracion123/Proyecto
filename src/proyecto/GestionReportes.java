@@ -69,7 +69,7 @@ public class GestionReportes extends javax.swing.JFrame {
             while(rs.next()){
                 jCantAlu.setText(Integer.toString(rs.getInt(1)));
             }
-            
+            jCantAlu.setEditable(false);
             
             
             

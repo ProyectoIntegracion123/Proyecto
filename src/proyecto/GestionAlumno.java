@@ -50,13 +50,11 @@ public class GestionAlumno extends javax.swing.JFrame {
         }
         tabla.setModel(modelo);
 
-        int aux = 0;
-        ps = con.prepareStatement("SELECT COUNT(*) FROM ALUMNO WHERE CODALU LIKE '" + a.id +"'");
+        ps = con.prepareStatement("SELECT COUNT(*) FROM ALUMNO WHERE IDF LIKE '" + a.id +"'");
         rs1 = ps.executeQuery();
         while (rs1.next()) {
-            aux = rs1.getInt(1);
+            CantidadAlumnos.setText(Integer.toString(rs1.getInt(1)));
         }
-        CantidadAlumnos.setText(Integer.toString(aux));
         CantidadAlumnos.setEditable(false);
     
     }
