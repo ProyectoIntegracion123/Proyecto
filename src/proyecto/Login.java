@@ -17,6 +17,9 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
+        setTitle("Login");
+        setResizable(false);
+        
     }
 
     /**
@@ -116,6 +119,10 @@ public class Login extends javax.swing.JFrame {
         administrador Admin = new administrador();
         String message = Admin.login(USER, PASSWORD);
         System.out.println(message);
+        
+        Principal a = new Principal();
+        a.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

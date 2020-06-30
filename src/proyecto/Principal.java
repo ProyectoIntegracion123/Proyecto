@@ -21,6 +21,8 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
         this.setLocationRelativeTo(null);
+        setResizable(false);
+        setTitle("Principal");
     }
 
     /**
@@ -136,11 +138,11 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        GestionTiempoP g = new GestionTiempoP();
-        try {
-            g.setVisible(true);
+        try {                                           
+            GestionReportes a = new GestionReportes();
+            a.setVisible(true);
             this.setVisible(false);
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed

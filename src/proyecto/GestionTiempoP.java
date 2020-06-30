@@ -187,9 +187,13 @@ public class GestionTiempoP extends javax.swing.JFrame {
     }//GEN-LAST:event_vModificarActionPerformed
 
     private void vAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vAtrasActionPerformed
-        this.setVisible(false);
-        Principal p = new Principal();
-        p.setVisible(true);
+        try {
+            this.setVisible(false);
+            GestionReportes p = new GestionReportes();
+            p.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionTiempoP.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_vAtrasActionPerformed
 
     private void vVerificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vVerificarActionPerformed
