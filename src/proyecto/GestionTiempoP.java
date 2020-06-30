@@ -67,6 +67,12 @@ public class GestionTiempoP extends javax.swing.JFrame {
             }
         });
 
+        vTiempo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                vTiempoKeyTyped(evt);
+            }
+        });
+
         vModificar.setText("MODIFICAR");
         vModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,76 +142,82 @@ public class GestionTiempoP extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void vModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vModificarActionPerformed
-        Connection con = null;
-
-        try {
-            con = conectar.getConnection();
-        } catch (SQLException ex) {
-            Logger.getLogger(GestionTiempoP.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        String cod;
-        int tiempo;
-        int flag1 = 0, flag2 = 0, flag3 = 0;
-
-        cod = vCodigo.getText();
-        tiempo = Integer.parseInt(vTiempo.getText());
+        if(vTiempo.getText() == null || vTiempo.getText().equals("")){
+            JOptionPane.showMessageDialog(this, "Llenar los campos");
+        } else {
         
-        if(tiempo <= 0 || tiempo > 12){
-            flag3 = 2;
-        }
-        
-        try {
-            ps = con.prepareStatement("SELECT CODALU, TIMEPRACT FROM ALUMNO WHERE idf LIKE " + a.id);
-            rs = ps.executeQuery();
+            Connection con = null;
 
-            while (rs.next()) {
+            try {
+                con = conectar.getConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(GestionTiempoP.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-                String a = rs.getString(1);
-                int b = rs.getInt(2);
+            String cod;
+            int tiempo;
+            int flag1 = 0, flag2 = 0, flag3 = 0;
 
-                if (a.equals(cod)) {
-                    flag1 = 1;
-                    
-                    if(tiempo > 0 && tiempo <= 12){
-                        flag3 = 1;
-                        
-                        if(b >= tiempo){
-                            flag2 = 2;
-                        }
-                        
-                        if (b < tiempo) {
-                            String cods = "'" + cod + "'";
+            cod = vCodigo.getText();
+            tiempo = Integer.parseInt(vTiempo.getText());
 
-                            ps1 = con.prepareStatement("update alumno set timepract = ? where  codalu = " + cods);
-                            ps1.setInt(1, tiempo);
-                            int var1 = 0;
-                            var1 = ps1.executeUpdate();
+            if (tiempo <= 0 || tiempo > 12) {
+                flag3 = 2;
+            }
 
-                            flag2 = 1;
+            try {
+                ps = con.prepareStatement("SELECT CODALU, TIMEPRACT FROM ALUMNO WHERE idf LIKE " + a.id);
+                rs = ps.executeQuery();
+
+                while (rs.next()) {
+
+                    String c = rs.getString(1);
+                    int b = rs.getInt(2);
+
+                    if (c.equals(cod)) {
+                        flag1 = 1;
+
+                        if (tiempo > 0 && tiempo <= 12) {
+                            flag3 = 1;
+
+                            if (b >= tiempo) {
+                                flag2 = 2;
+                            }
+
+                            if (b < tiempo) {
+                                String cods = "'" + cod + "'";
+
+                                ps1 = con.prepareStatement("update alumno set timepract = ? where  codalu = " + cods);
+                                ps1.setInt(1, tiempo);
+                                int var1 = 0;
+                                var1 = ps1.executeUpdate();
+
+                                flag2 = 1;
+                            }
                         }
                     }
                 }
-            }
-            
-            if(flag1 == 0){
-                JOptionPane.showMessageDialog(this, "Código erroneo");
-            }
-            
-            if(flag2 == 1){
-                JOptionPane.showMessageDialog(this, "El tiempo se modifico correctamente");
-            }else{
-                if(flag2 == 2){
+
+                if (flag1 == 0) {
+                    JOptionPane.showMessageDialog(this, "Código erroneo");
+                }
+
+                if (flag2 == 1) {
+                    JOptionPane.showMessageDialog(this, "El tiempo se modifico correctamente");
+                }
+
+                if (flag2 == 2) {
                     JOptionPane.showMessageDialog(this, "El tiempo es menor o igual al almacenado");
                 }
+
+                if (flag3 == 2) {
+                    JOptionPane.showMessageDialog(this, "El tiempo tiene que ser mayor a 0 y menor o igual a 12");
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(GestionTiempoP.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            if(flag3 == 2){
-                JOptionPane.showMessageDialog(this, "El tiempo tiene que se mayor a 0 y menor o igual a 12");
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(GestionTiempoP.class.getName()).log(Level.SEVERE, null, ex);
+        
         }
 
     }//GEN-LAST:event_vModificarActionPerformed
@@ -230,9 +242,13 @@ public class GestionTiempoP extends javax.swing.JFrame {
         }
 
         String cod;
-        boolean flag = false;
+        int flag = 0;
 
         cod = vCodigo.getText();
+
+        if (cod.length() == 0) {
+            flag = 2;
+        }
 
         try {
             ps = cn.prepareStatement("SELECT CODALU FROM ALUMNO WHERE idf LIKE " + a.id);
@@ -243,16 +259,20 @@ public class GestionTiempoP extends javax.swing.JFrame {
                 String a = rs.getString(1);
 
                 if (a.equals(cod)) {
-                    flag = true;
+                    flag = 1;
                 }
             }
-            
-            if(flag == true){
+
+            if (flag == 1) {
                 JOptionPane.showMessageDialog(this, "Código correcto");
-            }else{
+            }
+            if (flag == 0) {
                 JOptionPane.showMessageDialog(this, "Código incorrecto");
             }
-            
+            if (flag == 2) {
+                JOptionPane.showMessageDialog(this, "Ingrese el código");
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(GestionTiempoP.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -260,10 +280,19 @@ public class GestionTiempoP extends javax.swing.JFrame {
     }//GEN-LAST:event_vVerificarActionPerformed
 
     private void vCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_vCodigoKeyTyped
-        if(vCodigo.getText().length() >= 8){
+        if (vCodigo.getText().length() >= 8) {
             evt.consume();
         }
     }//GEN-LAST:event_vCodigoKeyTyped
+
+    private void vTiempoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_vTiempoKeyTyped
+        char validar = evt.getKeyChar();
+
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_vTiempoKeyTyped
 
     /**
      * @param args the command line arguments
