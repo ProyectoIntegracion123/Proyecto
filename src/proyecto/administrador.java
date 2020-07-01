@@ -42,7 +42,6 @@ public class administrador {
             conexion=Con.getConnection();
             Statement stmt1 = null;
             stmt1 = conexion.createStatement();
-            System.out.println("administrador");
             ResultSet result1 = stmt1.executeQuery(query);
             while(result1.next()){
                  nombre = result1.getString("nombre");

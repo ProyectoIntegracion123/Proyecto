@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -125,43 +126,51 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {                                         
-            // ACCION DE LOGIN PARA EL USUARIO ADMINISTRADOR:
-            String USER = usuariologin.getText();
-            String PASSWORD = passlogin.getText();
-            administrador Admin = new administrador();
-            String message = Admin.login(USER, PASSWORD);
-            System.out.println(message);
+        String USER = usuariologin.getText().trim();
+        String PASSWORD = passlogin.getText().trim();
+        if(USER.equals("") || PASSWORD.equals("")){
+            JOptionPane.showMessageDialog(this,"Usuario / Contraseña vacios");
+        }else{
             
+            String query="select * from administrador where usuario='"+USER+"' and passw='"+PASSWORD+"'";
+            String nombre ="";
+            String apellido="";
+            String usuario="";
+            int idfacultad=0;
             
             Conexion conectar = new Conexion();
             PreparedStatement ps;
             ResultSet rs;
             try {
                 Connection con = conectar.getConnection();
-                ps = con.prepareStatement("SELECT IDF FROM ADMINISTRADOR WHERE USUARIO like '"+ USER+"'");
+//                   ps = con.prepareStatement("SELECT IDF FROM ADMINISTRADOR WHERE USUARIO like '"+ USER+"'");
+                ps = con.prepareStatement(query);
                 rs = ps.executeQuery();
                 while(rs.next()){
                     id = rs.getInt(1);
+                    nombre=rs.getString("nombre");
+                }
+                if(nombre.equals("")){
+                    JOptionPane.showMessageDialog(this,"Usuario / Contraseña Incorrectos");
+                }else{
+                    GestionAlumno b = new GestionAlumno();
+                    b.setVisible(false);
+                    
+                    GestionReportes c = new GestionReportes();
+                    c.setVisible(false);
+                    
+                    GestionTiempoP x = new GestionTiempoP();
+                    x.setVisible(false);
+                    
+                    Principal a = new Principal();
+                    a.setVisible(true);
+                    this.setVisible(false);
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            GestionAlumno b = new GestionAlumno();
-            b.setVisible(false);
             
-            GestionReportes c = new GestionReportes();
-            c.setVisible(false);
             
-            GestionTiempoP x = new GestionTiempoP();
-            x.setVisible(false);
-            
-            Principal a = new Principal();
-            a.setVisible(true);
-            this.setVisible(false);
-        } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

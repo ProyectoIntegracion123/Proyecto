@@ -14,7 +14,13 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
 
 /**
  *
@@ -25,12 +31,15 @@ public class GestionReportes extends javax.swing.JFrame {
     /**
      * Creates new form GestionReportes
      */
+    public  String codigoAL;
+    public  String nombreAl;
+    public  String apellidoAl;
     Conexion conectar = new Conexion();
     Connection con;
     PreparedStatement ps;
     ResultSet rs;
     Login a = new Login();
-
+    
     public void Actualizar() throws SQLException {
         con = conectar.getConnection();
         try {
@@ -155,6 +164,11 @@ public class GestionReportes extends javax.swing.JFrame {
         jLabel12.setText("Tiempo Practicas");
 
         jButton1.setText("Generar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -190,7 +204,7 @@ public class GestionReportes extends javax.swing.JFrame {
                             .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(87, Short.MAX_VALUE)
+                .addContainerGap(76, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(66, 66, 66)
                 .addComponent(jButton2)
@@ -282,7 +296,7 @@ public class GestionReportes extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
+                .addContainerGap(7, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -378,6 +392,9 @@ public class GestionReportes extends javax.swing.JFrame {
             jTextField8.setEnabled(false);
             jTextField12.setText(rs.getString("TimePract"));
             jTextField12.setEnabled(false);
+            codigoAL=rs.getString("codalu");
+            nombreAl=rs.getString("NomAlu");
+            apellidoAl=rs.getString("ApaAlu");
         } catch (SQLException ex) {
             System.err.println(ex.toString());
         }
@@ -409,6 +426,53 @@ public class GestionReportes extends javax.swing.JFrame {
         a.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        System.out.println("ENTRANDO A GENERAR REPORTE");
+        Document documento= new Document();
+        try{
+            String ruta = System.getProperty("user.home");
+            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/Reporte_Alumnos.pdf"));
+            documento.open();
+            
+            PdfPTable tabla = new PdfPTable(3);
+            PdfPTable tabla2 = new PdfPTable(1);
+            PdfPTable tabla3 = new PdfPTable(1);
+            PdfPTable tabla4 = new PdfPTable(1);
+            PdfPTable tabla5 = new PdfPTable(1);
+            tabla2.addCell("CONSTANCIA DE PRÁCTICAS");
+            tabla3.addCell("Por medio de la presente dejamos constancia que el estudiante "
+                    + "ha realizado sus practicas.");
+            tabla4.addCell("El estudiante **** realizó sus prácticas a completa satisfacción y mostró en todo momento"
+                    + "eficiencia, puntualidad, responsabilidad y buena formación academica.");
+            tabla5.addCell("Se otorga la presente constancia para los fines que el interesado considere conveniente");
+            tabla.addCell("Código");
+            tabla.addCell("Nombre del Alumno");
+            tabla.addCell("Apellido del Alumno");    
+                                         
+                        tabla.addCell(codigoAL);
+                        tabla.addCell(nombreAl);
+                        tabla.addCell(apellidoAl);
+                   
+                documento.add(tabla);  
+                
+                
+            documento.add(tabla2); 
+            documento.add(tabla3); 
+            documento.add(tabla4); 
+            documento.add(tabla5);  
+            documento.add(tabla);  
+            documento.close();
+            JOptionPane.showMessageDialog(this,"REPORTE CREADO");
+            System.out.println("REPORTE CREADO");
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
