@@ -31,9 +31,10 @@ public class GestionReportes extends javax.swing.JFrame {
     /**
      * Creates new form GestionReportes
      */
-    public  String codigoAL;
+    public  String codigoAL="";
     public  String nombreAl;
     public  String apellidoAl;
+    public int timepractAl;
     Conexion conectar = new Conexion();
     Connection con;
     PreparedStatement ps;
@@ -395,6 +396,7 @@ public class GestionReportes extends javax.swing.JFrame {
             codigoAL=rs.getString("codalu");
             nombreAl=rs.getString("NomAlu");
             apellidoAl=rs.getString("ApaAlu");
+            timepractAl=Integer.parseInt(rs.getString("TimePract"));
         } catch (SQLException ex) {
             System.err.println(ex.toString());
         }
@@ -430,10 +432,15 @@ public class GestionReportes extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         System.out.println("ENTRANDO A GENERAR REPORTE");
+        if(codigoAL.equals("")){
+            JOptionPane.showMessageDialog(this,"No se puede generar un reporte con datos vacios");
+        }else if(timepractAl<12){
+            JOptionPane.showMessageDialog(this,"El tiempo de practicas no puede ser inferior a 12 meses");
+        }else{
         Document documento= new Document();
         try{
             String ruta = System.getProperty("user.home");
-            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/Reporte_Alumnos.pdf"));
+            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/"+codigoAL+".pdf"));
             documento.open();
             
             PdfPTable tabla = new PdfPTable(3);
@@ -453,9 +460,7 @@ public class GestionReportes extends javax.swing.JFrame {
                                          
                         tabla.addCell(codigoAL);
                         tabla.addCell(nombreAl);
-                        tabla.addCell(apellidoAl);
-                   
-                documento.add(tabla);  
+                        tabla.addCell(apellidoAl); 
                 
                 
             documento.add(tabla2); 
@@ -468,6 +473,7 @@ public class GestionReportes extends javax.swing.JFrame {
             System.out.println("REPORTE CREADO");
         }catch(Exception e){
             System.out.println(e);
+        }
         }
         
         
